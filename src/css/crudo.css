@@ -1,0 +1,13 @@
+body{
+	font-family: arial;
+}
+h1, h2, h3, h4{
+	color: blue;
+}
+label{
+	font-weight: bold;
+	color: blue;
+}
+label::after{
+	content: ': ';
+}

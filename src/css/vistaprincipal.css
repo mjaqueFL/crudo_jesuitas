@@ -1,0 +1,30 @@
+/* Formamos el layout principal con un gridlayout */
+body{
+	display: grid;
+	grid-template-areas: 
+		'header header'
+		'menu main'
+		'footer footer';
+	grid-template-columns: 20% auto;
+	grid-gap: 0.2em;
+	padding: 0.5em;
+}
+header {
+	grid-area: header;
+	padding: 0.5em;
+	background-color: pink;
+}
+nav{
+	grid-area: menu;
+	background-color: lightblue;
+	padding: 0.5em;
+}
+main{
+	grid-area: main;
+	padding: 1em;
+}
+footer{
+	grid-area: footer;
+	padding: 0.5em;
+	background-color: grey;
+}

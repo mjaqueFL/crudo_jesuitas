@@ -1,0 +1,21 @@
+CRUDO - Create, Read, Update, Delete, Others...
+
+CRUDO es un CRUD que gestiona elementos de tipo Clase:
+
+Clase:
+  - id. identificador único del objeto.
+  - nombre. Texto corto.
+  - descripcion. Texto largo.
+  - fecha. Fecha.
+  - estado. Valor enumerado.
+  - booleano.
+  - imagen.
+
+REQUERIMIENTOS
+Versión 1.0
+  - Alta de objetos.
+  - Listado de objetos.
+  - Eliminación de objetos
+  - Consulta de objeto.
+  - Edición de objeto.
+  - Búsqueda de objetos.
