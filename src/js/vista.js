@@ -49,9 +49,12 @@ export class Vista {
 							const promesas = [] //Creamos un array de promesas
               for (let hijo in this.hijos)
                 promesas.push(this.hijos[hijo].cargar())
-              Promise.all(promesas)
-            })
-        })
+              return Promise.all(promesas).then(() => {
+				console.log(`Cargado ${this.constructor.name.toLowerCase()}`)
+				resolve(true)
+				})
+		})
+       })
         .catch(error => {
           throw error
         })
