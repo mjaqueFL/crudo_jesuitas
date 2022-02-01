@@ -29,7 +29,7 @@ export class Modelo{
 	**/
 	conectar(){
 		if (!window.indexedDB) throw 'Su navegador no soporta una versión estable de indexedDB. CRUDO puede no funcionar.'
-
+    	
     	//Abrimos la base de datos
     	console.log('Abriendo la conexión a la base de datos...')
 		var peticion = window.indexedDB.open(this.bdNombre, this.bdVersion)
@@ -41,9 +41,9 @@ export class Modelo{
 		}.bind(this)
 		peticion.onupgradeneeded = this.actualizarBD.bind(this)
 	}
-	/**	Actualiza el Modelo a una nueva versión.
+	/**	Actualiza el Modelo a una nueva versión. 
 		<p>Si no existe el ObjectStore lo crea.</p>
-		@param {Event} evento - Evento del error.
+		@param {Event} evento - Evento de actualización de BD.
 		@returns {boolean} True si la actualización tuvo éxito y se ejecutará onsuccess o false en caso contrario.
 	**/
 	actualizarBD(evento){
@@ -53,14 +53,14 @@ export class Modelo{
 		// Crea un almacén de objetos (objectStore) para esta base de datos
 		let os1 = this.bd.createObjectStore(this.#OS1, { autoIncrement : true })
 		//var objectStore = this.bd.createObjectStore("name", { keyPath: "myKey" });
-
+		
 		os1.transaction.oncomplete = function(evento) {
 			console.log(`Creación del ObjectStore de ${this.#OS1} terminada.`)
 		}.bind(this)
 		console.log('Base de datos actualizada.')
-
+		
 		return true;
-	}
+	}	
 	/**
 		Gestor de errores de la clase
 		@param evento {Event} Evento que generó el error.
@@ -78,12 +78,32 @@ export class Modelo{
 		let transaccion = this.bd.transaction(this.#OS1, tipo)
 		return transaccion.objectStore(this.#OS1)	//OS para la transacción
 	}
-	/**	Inserta un jesuita en la base de datos
-		@param {Jesuita} jesuita - Jesuita a insertar.
+	/**	Inserta un objeto en la base de datos
+		@param {Clase} objeto - objeto a insertar.
 		@param {Function} callback - Función de callback que se llamará al completar la operación.
 	**/
-	insertar(jesuita, callback){
-		let peticion = this.getTransaccionOS('readwrite').add(jesuita)
+	insertar(objeto, callback){
+		let peticion = this.getTransaccionOS('readwrite').add(objeto)
 		peticion.onsuccess = callback
 	}
+	/**	Devuelve la lista de objetos de la base de datos.
+		@param {Function} callback - Función de callback que se llamará al completar la operación y que recibirá el resultado.
+	**/
+	listar(callback){
+		let resultado = []
+		
+		//Creamos la transacción y obtenemos su OS
+		let os = this.getTransaccionOS("readonly")
+		os.openCursor().onsuccess = function(evento) {
+			let cursor = evento.target.result
+			if (cursor) {
+				let objeto = cursor.value
+				objeto.clave = cursor.primaryKey
+				resultado.push(objeto)
+				cursor.continue()
+ 			}
+			else
+ 				callback(resultado)
+		}
+	}	
 }
